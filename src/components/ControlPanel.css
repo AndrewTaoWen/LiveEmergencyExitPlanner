@@ -1,0 +1,238 @@
+.control-panel {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 360px;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 40px);
+  background: rgba(17, 24, 39, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  transform: scale(1);
+  zoom: 1;
+}
+
+.control-panel-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.control-panel-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #f3f4f6;
+}
+
+.view-mode-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+.view-mode-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.view-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.view-mode-btn.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.control-panel-content {
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.status-card,
+.feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.status-header,
+.feature-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #f3f4f6;
+}
+
+.status-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.status-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.status-value {
+  color: #f3f4f6;
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+
+.status-value.critical-value {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.feature-description {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
+.feature-description p {
+  margin-bottom: 12px;
+}
+
+.risk-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid;
+}
+
+.legend-color.critical {
+  background: #ef444420;
+  border-color: #ef4444;
+}
+
+.legend-color.high {
+  background: #f9731620;
+  border-color: #f97316;
+}
+
+.legend-color.medium {
+  background: #eab30820;
+  border-color: #eab308;
+}
+
+.legend-color.low {
+  background: #3b82f620;
+  border-color: #3b82f6;
+}
+
+.info-card {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.info-card strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #93c5fd;
+}
+
+.info-card p {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.safety-status-wrapper {
+  margin-top: 16px;
+}
+
+.safety-status-wrapper .safety-status {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  animation: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  min-width: auto;
+}
+
+.safety-status-wrapper .safety-status.critical {
+  animation: none;
+}
+
+/* Scrollbar styling */
+.control-panel-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.control-panel-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.control-panel-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.control-panel-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .control-panel {
+    width: calc(100% - 40px);
+    max-width: 360px;
+  }
+}
+

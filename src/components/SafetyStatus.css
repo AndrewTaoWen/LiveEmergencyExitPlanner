@@ -1,0 +1,148 @@
+.safety-status {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  background: rgba(17, 24, 39, 0.95);
+  backdrop-filter: blur(10px);
+  border: 2px solid;
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 280px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+  transition: all 0.3s;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.safety-status.safe {
+  border-color: #10b981;
+}
+
+.safety-status.caution {
+  border-color: #eab308;
+}
+
+.safety-status.at_risk {
+  border-color: #f97316;
+}
+
+.safety-status.critical {
+  border-color: #ef4444;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.6);
+  }
+}
+
+.safety-status-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid;
+}
+
+.safety-status-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.safety-status-message {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f3f4f6;
+  line-height: 1.2;
+}
+
+.safety-status-description {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+
+.safety-status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.safety-status.critical .safety-status-indicator {
+  animation: criticalBlink 1s ease-in-out infinite;
+}
+
+@keyframes criticalBlink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .safety-status {
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    min-width: auto;
+    padding: 12px 16px;
+  }
+
+  .safety-status-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .safety-status-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .safety-status-message {
+    font-size: 16px;
+  }
+
+  .safety-status-description {
+    font-size: 12px;
+  }
+}
+

@@ -1,0 +1,99 @@
+.map-error {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: white;
+}
+
+.map-error-content {
+  max-width: 600px;
+  padding: 40px;
+  text-align: center;
+  background: rgba(30, 41, 59, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.map-error-icon {
+  color: #f59e0b;
+  margin-bottom: 20px;
+}
+
+.map-error-content h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #f3f4f6;
+}
+
+.map-error-content p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.map-error-steps {
+  text-align: left;
+  background: rgba(15, 23, 42, 0.5);
+  padding: 24px;
+  border-radius: 8px;
+  margin: 24px 0;
+}
+
+.map-error-steps h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #f3f4f6;
+}
+
+.map-error-steps ol {
+  margin-left: 20px;
+  line-height: 2;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.map-error-steps li {
+  margin-bottom: 8px;
+}
+
+.map-error-steps code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  color: #60a5fa;
+}
+
+.map-error-steps a {
+  color: #60a5fa;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s;
+}
+
+.map-error-steps a:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+.map-error-note {
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.map-error-note strong {
+  color: #93c5fd;
+}
+
