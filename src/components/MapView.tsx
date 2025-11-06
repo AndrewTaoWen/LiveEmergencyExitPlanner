@@ -1,13 +1,15 @@
 import { useEffect, useState, useCallback } from 'react'
 import mapboxgl from 'mapbox-gl'
-import Map, { NavigationControl, FullscreenControl, ViewStateChangeEvent } from 'react-map-gl'
-import { ViewMode, RiskEvent } from '../types'
+import Map, { NavigationControl, FullscreenControl, ViewStateChangeEvent, Marker } from 'react-map-gl'
+import { ViewMode, RiskEvent, TrackedUser } from '../types'
 import LocationMarker from './LocationMarker'
 import RiskEventMarker from './RiskEventMarker'
 import FixedIncidentMarker from './FixedIncidentMarker'
+import TrackedUserMarker from './TrackedUserMarker'
 import MapError from './MapError'
 import IncidentDetailPanel from './IncidentDetailPanel'
 import OperatorView from './OperatorView'
+import OperatorIncidentList from './OperatorIncidentList'
 import AlertBanner from './AlertBanner'
 import BottomDrawer from './BottomDrawer'
 import TransportModeMenu, { TransportMode, TRANSPORT_MODES } from './TransportModeMenu'
@@ -37,11 +39,13 @@ export default function MapView({ viewMode, onLocationUpdate, onEventsUpdate, on
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null)
   const [riskEvents, setRiskEvents] = useState<RiskEvent[]>([])
   const [selectedEvent, setSelectedEvent] = useState<RiskEvent | null>(null)
+  const [selectedOperatorIncident, setSelectedOperatorIncident] = useState<RiskEvent | null>(null)
   const [fixedIncident, setFixedIncident] = useState<RiskEvent | null>(null)
   const [showAlert, setShowAlert] = useState(false)
   const [selectedFixedIncident, setSelectedFixedIncident] = useState<RiskEvent | null>(null)
   const [transportMode, setTransportMode] = useState<TransportMode>('walking')
   const [dragTarget, setDragTarget] = useState<[number, number] | null>(null)
+  const [trackedUsers, setTrackedUsers] = useState<TrackedUser[]>([])
   const [viewState, setViewState] = useState({
     latitude: 37.7749,
     longitude: -122.4194,
@@ -173,6 +177,50 @@ export default function MapView({ viewMode, onLocationUpdate, onEventsUpdate, on
     }
   }, [onFixedIncidentUpdate])
 
+  // Generate tracked users for operator view
+  useEffect(() => {
+    if (viewMode === 'operator' && userLocation) {
+      // Generate simulated tracked users around the area
+      const generateTrackedUsers = (): TrackedUser[] => {
+        const users: TrackedUser[] = []
+        const names = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace', 'Henry']
+        const baseLat = userLocation[1]
+        const baseLng = userLocation[0]
+        
+        for (let i = 0; i < 8; i++) {
+          const offsetLat = (Math.random() - 0.5) * 0.02 // ~1km offset
+          const offsetLng = (Math.random() - 0.5) * 0.02
+          const statuses: ('safe' | 'at_risk' | 'unknown')[] = ['safe', 'safe', 'safe', 'at_risk', 'unknown']
+          
+          users.push({
+            id: `user-${i + 1}`,
+            name: names[i] || `User ${i + 1}`,
+            location: [baseLng + offsetLng, baseLat + offsetLat],
+            status: statuses[Math.floor(Math.random() * statuses.length)],
+            lastUpdate: new Date(Date.now() - Math.random() * 300000), // 0-5 min ago
+          })
+        }
+        return users
+      }
+      
+      setTrackedUsers(generateTrackedUsers())
+      
+      // Update user locations periodically
+      const interval = setInterval(() => {
+        setTrackedUsers(prev => prev.map(user => ({
+          ...user,
+          location: [
+            user.location[0] + (Math.random() - 0.5) * 0.0001,
+            user.location[1] + (Math.random() - 0.5) * 0.0001,
+          ] as [number, number],
+          lastUpdate: new Date(),
+        })))
+      }, 10000) // Update every 10 seconds
+      
+      return () => clearInterval(interval)
+    }
+  }, [viewMode, userLocation])
+
   // Generate risk events once when location is first set
   useEffect(() => {
     if (!userLocation) return
@@ -215,27 +263,31 @@ export default function MapView({ viewMode, onLocationUpdate, onEventsUpdate, on
       setRiskEvents(prevEvents => {
         if (prevEvents.length === 0) return prevEvents
         
-        const updated = prevEvents.map(event => {
-          // Update the event's timeline
-          const updatedEvent = simulateEventUpdate(event)
-          
-          // Update distance to user
-          if (userLocation) {
-            updatedEvent.distance = calculateDistance(
-              userLocation[1],
-              userLocation[0],
-              event.location[1],
-              event.location[0]
-            )
-          }
-          
-          // If this is the selected event, update it too
-          if (selectedEvent && event.id === selectedEvent.id) {
-            setSelectedEvent(updatedEvent)
-          }
-          
-          return updatedEvent
-        })
+        const MAX_DISTANCE_METERS = 2000
+        
+        const updated = prevEvents
+          .map(event => {
+            // Update the event's timeline
+            const updatedEvent = simulateEventUpdate(event)
+            
+            // Update distance to user
+            if (userLocation) {
+              updatedEvent.distance = calculateDistance(
+                userLocation[1],
+                userLocation[0],
+                event.location[1],
+                event.location[0]
+              )
+            }
+            
+            // If this is the selected event, update it too
+            if (selectedEvent && event.id === selectedEvent.id) {
+              setSelectedEvent(updatedEvent)
+            }
+            
+            return updatedEvent
+          })
+          .filter(event => (event.distance || Infinity) <= MAX_DISTANCE_METERS)
         if (onEventsUpdate) {
           onEventsUpdate(updated)
         }
@@ -246,14 +298,16 @@ export default function MapView({ viewMode, onLocationUpdate, onEventsUpdate, on
     return () => clearInterval(interval)
   }, [userLocation, selectedEvent, onEventsUpdate])
 
-  // Update distances to events as user moves (without regenerating events)
+  // Update distances to events as user moves and filter out events beyond 2km
   useEffect(() => {
     if (!userLocation) return
+
+    const MAX_DISTANCE_METERS = 2000
 
     setRiskEvents(prevEvents => {
       if (prevEvents.length === 0) return prevEvents
       
-      return prevEvents.map(event => {
+      const eventsWithDistances = prevEvents.map(event => {
         const distance = calculateDistance(
           userLocation[1],
           userLocation[0],
@@ -262,8 +316,19 @@ export default function MapView({ viewMode, onLocationUpdate, onEventsUpdate, on
         )
         return { ...event, distance }
       })
+
+      // Filter out events beyond 2km
+      const filteredEvents = eventsWithDistances.filter(event => 
+        (event.distance || Infinity) <= MAX_DISTANCE_METERS
+      )
+
+      if (filteredEvents.length !== prevEvents.length && onEventsUpdate) {
+        onEventsUpdate(filteredEvents)
+      }
+
+      return filteredEvents
     })
-  }, [userLocation])
+  }, [userLocation, onEventsUpdate])
 
   // Check distance to fixed incident and show alert if < 40m
   useEffect(() => {
@@ -298,6 +363,27 @@ export default function MapView({ viewMode, onLocationUpdate, onEventsUpdate, on
 
   const handleCloseBottomDrawer = useCallback(() => {
     setSelectedFixedIncident(null)
+  }, [])
+
+  const handleIncidentUpdate = useCallback((incidentId: string, updates: Partial<RiskEvent>) => {
+    setRiskEvents(prev => {
+      const updated = prev.map(event => 
+        event.id === incidentId ? { ...event, ...updates } : event
+      )
+      if (onEventsUpdate) {
+        onEventsUpdate(updated)
+      }
+      return updated
+    })
+  }, [onEventsUpdate])
+
+  const handleOperatorIncidentSelect = useCallback((incident: RiskEvent | null) => {
+    setSelectedOperatorIncident(incident)
+  }, [])
+
+  const handleOperatorIncidentClick = useCallback((incident: RiskEvent) => {
+    setSelectedOperatorIncident(incident)
+    // This will trigger the OperatorView to show the management panel
   }, [])
 
   const onMove = useCallback((evt: ViewStateChangeEvent) => {
@@ -383,10 +469,34 @@ export default function MapView({ viewMode, onLocationUpdate, onEventsUpdate, on
             onSelect={handleEventSelect}
           />
         ))}
+
+        {viewMode === 'operator' && trackedUsers.map((user) => (
+          <Marker
+            key={user.id}
+            longitude={user.location[0]}
+            latitude={user.location[1]}
+            anchor="center"
+          >
+            <TrackedUserMarker user={user} />
+          </Marker>
+        ))}
       </Map>
       
       {viewMode === 'operator' && (
-        <OperatorView events={riskEvents} />
+        <>
+          <OperatorView 
+            events={riskEvents}
+            trackedUsers={trackedUsers}
+            selectedIncident={selectedOperatorIncident}
+            onIncidentUpdate={handleIncidentUpdate}
+            onIncidentSelect={handleOperatorIncidentSelect}
+          />
+          <OperatorIncidentList
+            events={riskEvents}
+            selectedIncident={selectedOperatorIncident}
+            onIncidentClick={handleOperatorIncidentClick}
+          />
+        </>
       )}
       
       {viewMode === 'user' && (

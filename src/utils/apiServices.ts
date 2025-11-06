@@ -99,7 +99,7 @@ export async function getWeatherAlerts(lat: number, lng: number): Promise<RiskEv
 /**
  * Get disaster declarations from FEMA (no API key required)
  */
-export async function getDisasterDeclarations(lat: number, lng: number, radiusKm: number = 50): Promise<RiskEvent[]> {
+export async function getDisasterDeclarations(lat: number, lng: number, radiusKm: number = 2): Promise<RiskEvent[]> {
   try {
     // FEMA API requires state/county lookup, this is a simplified version
     // For production, you'd want to geocode the lat/lng to get state/county first
@@ -157,7 +157,7 @@ export async function getDisasterDeclarations(lat: number, lng: number, radiusKm
  * Get crime data from city open data portals (SF example)
  * Note: This is city-specific. You'll need to adapt for different cities.
  */
-export async function getCrimeData(lat: number, lng: number, radiusMeters: number = 1000): Promise<RiskEvent[]> {
+export async function getCrimeData(lat: number, lng: number, radiusMeters: number = 2000): Promise<RiskEvent[]> {
   try {
     // San Francisco open data portal example
     // Other cities have similar endpoints - you'd need to lookup their specific APIs

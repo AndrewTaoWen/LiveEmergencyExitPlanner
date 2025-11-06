@@ -79,8 +79,14 @@ export async function generateRiskEventsFromAPIs(userLocation: [number, number])
     
     eventsWithDistances.push(...crimesWithDistances)
     
+    // Filter to only include events within 2km (2000 meters)
+    const MAX_DISTANCE_METERS = 2000
+    const filteredEvents = eventsWithDistances.filter(event => 
+      (event.distance || Infinity) <= MAX_DISTANCE_METERS
+    )
+    
     // Sort by distance
-    return eventsWithDistances.sort((a, b) => (a.distance || 0) - (b.distance || 0))
+    return filteredEvents.sort((a, b) => (a.distance || 0) - (b.distance || 0))
   } catch (error) {
     console.error('Error fetching real-time data:', error)
     // Fallback to simulated data

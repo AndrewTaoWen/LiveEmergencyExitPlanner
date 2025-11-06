@@ -29,3 +29,38 @@ export interface UserLocation {
   timestamp: Date
 }
 
+export interface TrackedUser {
+  id: string
+  name: string
+  location: [number, number]
+  status: 'safe' | 'at_risk' | 'unknown'
+  lastUpdate: Date
+  nearbyIncidents?: string[] // incident IDs
+}
+
+export interface ActivityLog {
+  id: string
+  timestamp: Date
+  type: 'incident_created' | 'incident_updated' | 'status_change' | 'severity_change' | 'user_alert' | 'assignment'
+  description: string
+  incidentId?: string
+  userId?: string
+  operatorId?: string
+}
+
+export interface IncidentNote {
+  id: string
+  incidentId: string
+  operatorId: string
+  operatorName: string
+  note: string
+  timestamp: Date
+}
+
+export interface IncidentAssignment {
+  incidentId: string
+  operatorId: string
+  operatorName: string
+  assignedAt: Date
+}
+

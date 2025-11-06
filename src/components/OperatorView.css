@@ -3,7 +3,7 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 380px;
+  width: 420px;
   background: rgba(17, 24, 39, 0.95);
   backdrop-filter: blur(10px);
   border-left: 1px solid rgba(255, 255, 255, 0.1);
@@ -12,7 +12,7 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   color: white;
 }
 
@@ -130,110 +130,22 @@
   color: #f3f4f6;
 }
 
-.operator-incident-list {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.operator-incident-list h3 {
-  font-size: 14px;
-  font-weight: 600;
-  margin: 0 0 12px 0;
-  color: #f3f4f6;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.incident-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow-y: auto;
-  flex: 1;
-}
-
-.incident-list-item {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 12px;
-  transition: background 0.2s;
-}
-
-.incident-list-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.incident-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.incident-item-type {
-  font-size: 11px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.incident-item-severity {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.incident-item-description {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.4;
-  margin-bottom: 8px;
-}
-
-.incident-item-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 11px;
-}
-
-.incident-item-status {
-  font-weight: 500;
-  text-transform: capitalize;
-}
-
-.incident-item-distance {
-  color: rgba(255, 255, 255, 0.6);
-}
-
 /* Scrollbar */
-.operator-view::-webkit-scrollbar,
-.incident-list::-webkit-scrollbar {
+.operator-view::-webkit-scrollbar {
   width: 6px;
 }
 
-.operator-view::-webkit-scrollbar-track,
-.incident-list::-webkit-scrollbar-track {
+.operator-view::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 3px;
 }
 
-.operator-view::-webkit-scrollbar-thumb,
-.incident-list::-webkit-scrollbar-thumb {
+.operator-view::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
 
-.operator-view::-webkit-scrollbar-thumb:hover,
-.incident-list::-webkit-scrollbar-thumb:hover {
+.operator-view::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
 
