@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { RiskEvent, IncidentStatus, ActivityLog } from '../types'
-import { Edit, Save, X, User, MessageSquare, CheckCircle, AlertCircle } from 'lucide-react'
+import { X, User, MessageSquare, CheckCircle, AlertCircle } from 'lucide-react'
 import './IncidentManagementPanel.css'
 
 interface IncidentManagementPanelProps {
@@ -16,7 +16,6 @@ export default function IncidentManagementPanel({
   onClose,
   onActivityLog 
 }: IncidentManagementPanelProps) {
-  const [isEditing, setIsEditing] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<IncidentStatus>(incident?.status || 'reported')
   const [selectedSeverity, setSelectedSeverity] = useState<string>(incident?.severity || 'low')
   const [note, setNote] = useState('')

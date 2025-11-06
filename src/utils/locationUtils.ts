@@ -156,7 +156,7 @@ export function generateRiskEvents(userLocation: [number, number]): RiskEvent[] 
   return events.sort((a, b) => (a.distance || 0) - (b.distance || 0))
 }
 
-function getInitialStatus(type: RiskEvent['type'], severity: RiskEvent['severity']): IncidentStatus {
+function getInitialStatus(_type: RiskEvent['type'], severity: RiskEvent['severity']): IncidentStatus {
   // Higher severity events more likely to be in progress
   if (severity === 'critical') {
     return Math.random() > 0.3 ? 'in_progress' : 'investigating'
@@ -311,7 +311,7 @@ export function simulateEventUpdate(event: RiskEvent): RiskEvent {
   return updatedEvent
 }
 
-function getStatusChangeDescription(type: RiskEvent['type'], status: IncidentStatus): string {
+function getStatusChangeDescription(_type: RiskEvent['type'], status: IncidentStatus): string {
   const descriptions: Record<IncidentStatus, string> = {
     'reported': 'Incident reported',
     'investigating': 'Authorities are investigating',

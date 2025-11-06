@@ -40,7 +40,7 @@ export function useLocationSimulator({
   }, [mode])
 
   useEffect(() => {
-    let updateInterval: NodeJS.Timeout | null = null
+    let updateInterval: ReturnType<typeof setInterval> | null = null
     let isFetchingRoute = false
 
     const fetchNewRoute = async (currentLocation: [number, number], targetDestination?: [number, number]) => {

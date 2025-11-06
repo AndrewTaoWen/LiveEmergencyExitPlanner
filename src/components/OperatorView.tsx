@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { RiskEvent, ActivityLog, TrackedUser } from '../types'
-import { AlertTriangle, Activity, Users, TrendingUp, X } from 'lucide-react'
+import { AlertTriangle, Activity, Users, TrendingUp } from 'lucide-react'
 import OperatorIncidentFilter from './OperatorIncidentFilter'
 import ActivityFeed from './ActivityFeed'
 import IncidentManagementPanel from './IncidentManagementPanel'
@@ -88,21 +88,6 @@ export default function OperatorView({
       incidentsByStatus,
     }
   }, [filteredEvents, trackedUsers])
-
-  const handleIncidentClick = (incident: RiskEvent) => {
-    setSelectedIncident(incident)
-    setShowManagementPanel(true)
-    if (onIncidentSelect) {
-      onIncidentSelect(incident)
-    }
-    // Scroll to top of operator view to show management panel
-    setTimeout(() => {
-      const operatorView = managementPanelRef.current?.closest('.operator-view')
-      if (operatorView) {
-        operatorView.scrollTo({ top: 0, behavior: 'smooth' })
-      }
-    }, 50)
-  }
 
   const handleIncidentUpdate = (incidentId: string, updates: Partial<RiskEvent>) => {
     if (onIncidentUpdate) {

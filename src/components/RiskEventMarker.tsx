@@ -5,11 +5,11 @@ import './RiskEventMarker.css'
 
 interface RiskEventMarkerProps {
   event: RiskEvent
-  userLocation: [number, number] | null
+  userLocation?: [number, number] | null
   onSelect?: (event: RiskEvent) => void
 }
 
-export default function RiskEventMarker({ event, userLocation, onSelect }: RiskEventMarkerProps) {
+export default function RiskEventMarker({ event, onSelect }: RiskEventMarkerProps) {
   const getIcon = () => {
     switch (event.type) {
       case 'crime':

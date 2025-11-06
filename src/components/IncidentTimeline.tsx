@@ -1,5 +1,5 @@
 import { TimelineUpdate } from '../types'
-import { Clock, AlertCircle, TrendingUp, Info } from 'lucide-react'
+import { Clock, TrendingUp, Info } from 'lucide-react'
 import './IncidentTimeline.css'
 
 interface IncidentTimelineProps {

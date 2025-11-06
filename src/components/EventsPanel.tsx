@@ -4,12 +4,12 @@ import './EventsPanel.css'
 
 interface EventsPanelProps {
   events: RiskEvent[]
-  userLocation: [number, number] | null
+  userLocation?: [number, number] | null
   onEventSelect: (event: RiskEvent) => void
   selectedEvent: RiskEvent | null
 }
 
-export default function EventsPanel({ events, userLocation, onEventSelect, selectedEvent }: EventsPanelProps) {
+export default function EventsPanel({ events, onEventSelect, selectedEvent }: EventsPanelProps) {
   const getEventIcon = (type: RiskEvent['type']) => {
     switch (type) {
       case 'crime':
